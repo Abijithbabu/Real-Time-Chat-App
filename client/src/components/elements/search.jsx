@@ -1,32 +1,38 @@
-import React from 'react'
+import { Box } from '@mui/material';
+import { motion } from 'framer-motion';
+import React from 'react';
+import styled from 'styled-components';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
-const SearchBar = styled(motion.div)({ // Use motion.div for animated Chat
-    height: '20px',
-    width: '80vh',
+const SearchBar = styled(Box)({ // Use motion.div for animated Chat
+    height: '34px',
+    width: '60px',
     backgroundColor: '#1C1C24',
     color: '#D1D2D4',
-    marginTop: '10px',
-    marginBottom: '10px',
-    borderRadius: "8px",
-    padding: "10px"
+    marginLeft: '11px',
+    marginBottom: '0px',
+    borderRadius: "6px",
+    padding: "9px",
+    paddingRight: "220px",
 });
 
-const Filter = styled(motion.div)({ // Use motion.div for animated Chat
-    height: '20px',
-    width: '20vh',
+const Filter = styled(Box)({ // Use motion.div for animated Chat
+    height: '34px',
+    width: '11vh',
     backgroundColor: '#1C1C24',
-    color: '#D1D2D4',
-    marginTop: '10px',
-    marginBottom: '10px',
-    borderRadius: "8px",
-    padding: "10px"
+    color: '#FFF',
+    marginLeft: '3px',
+    marginTop: '0px',
+    marginBottom: '0px',
+    borderRadius: "6px",
+    padding: "7px"
 });
 
 export default function Search() {
     return (
-        <Box>
-            <SearchBar><h3>Search</h3></SearchBar>
-            <Filter>F</Filter>
+        <Box display={'flex'} flexDirection={'row'} sx={{'background-color': 'tranparent'}}>
+            <SearchBar >Search </SearchBar>
+            <Filter ><FilterListIcon sx={{'background-color': '#1C1C24'}}/></Filter>
         </Box>
-    )
+    ) 
 }
