@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AnimatePresence, motion } from 'framer-motion'; // Import motion from framer-motion
 import Search from '../components/elements/search';
+import ChatView from '../components/elements/chatView';
 
 
 const Avater = styled(motion.div)({ // Use motion.div for animated Avatar
@@ -36,7 +37,7 @@ const Chat = styled(motion.div)({ // Use motion.div for animated Chat
     marginTop: '0px',
     marginBottom: '10px',
     borderRadius: "8px",
-    padding: "10px"
+    padding: "5px"
 });
 
 
@@ -50,7 +51,7 @@ const ChatBox = styled(motion.div)({
     marginBottom: '10px',
     borderRadius: "8px",
     marginLeft: '10px',
-    padding: "10px"
+    padding: "0px"
 });
 
 export default function Home() {
@@ -103,24 +104,7 @@ export default function Home() {
                             </Box>
                                     )}
                         </Avater>
-                        {/* <Box>
-                            <AnimatePresence>
-                                {!avatarClicked && (
-                                    <motion.div
-                                        key="search"
-                                        initial={{ opacity: 0, x: -0 }}
-                                        animate={{
-                                            opacity: 1, x: 0,
-                                            width: avatarClicked ? '230px' : '40px',
-                                        }}
-                                        //   exit={{ opacity: 0, x: -0 }}
-                                        transition={{ delay: 0.5 }} // Add a delay of 0.5 seconds
-                                    >
-
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </Box> */}
+                        
                     </Box>
                     <Box display="flex" flexDirection="row">
                         <Nav
@@ -134,7 +118,15 @@ export default function Home() {
                             initial={{ height: '50vh', width: '270px' }}
                             animate={{ height: '100vh', flex: 1 }}
                         >
-                            Message<h1 style={{ 'background-color': 'transparent' }}>s</h1>
+                            <Box sx={{padding:'5px','background-color': 'transparent'}}>
+                            Message
+
+                            </Box>
+                            <Box sx={{marginTop: '10px','background-color': 'transparent'}}>
+                            <ChatView />
+
+                            </Box>
+                            <ChatView/>
                         </Chat>
                         {/* )} */}
                     </Box>
