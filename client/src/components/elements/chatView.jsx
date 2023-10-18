@@ -1,6 +1,7 @@
 import { Avatar, Box, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 
 const Outline = styled(motion.div)({
@@ -8,25 +9,49 @@ const Outline = styled(motion.div)({
     filter: 'drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25))',
     width: '100',
     height: '50px',
-    padding: '5px',
+    padding: '5px', 
     borderRadius: '5px',
-    margin:'0px',
+    margin:'0px', 
     marginTop: '5px',
 })
-export default function ChatView() {
-    return (
-        <Outline >
-            <Box display={'flex'} flexDirection={'row'} sx={{'background-color': 'transparent'}}>
+export default function ChatView({contacts = [1,2] ,changeChat, setChat}) {
+    const [chatClicked, setChatClicked] = useState(false);
+    const [currentUserName, setCurrentUserName] = useState(undefined);
+    const [currentUserImage, setCurrentUserImage] = useState(undefined);
+    const [currentSelected, setCurrentSelected] = useState(undefined);
+    useEffect(()=>{ 
+      const fetchUser = async () => {
+      const data = await JSON.parse(
+        localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+      );
+      console.log(data)
+      setCurrentUserName(data.username);
+      setCurrentUserImage(data.avatarImage);
+    }
+    fetchUser() 
+    }, []);
+    const changeCurrentChat = (index, contact) => {
+      setCurrentSelected(index);
+      changeChat(contact);
+    };
+    const handleChatClick = () => {
+        setChatClicked(true);
+    };
+    console.log(contacts)  
+    return contacts.map(item=>       
+    <Outline >
+            <Box display={'flex'} flexDirection={'row'} sx={{'background-color': 'transparent'}}
+            onClick={()=>setChat(item)}>
                 <Box sx={{'background-color': 'transparent',padding:'3px',paddingRight:'8px'}}>
                     <Avatar
                         
                         alt="Remy Sharp"
-                        src="https://lh3.googleusercontent.com/YwiWk2MdDQ-eIgvDcs5x3CTYigdC8SvbPDZ64QqFC1BoVCohTF-1S3f4kTbs69UdzYxA7Q=s85"
+                        src={`data:image/svg+xml;base64,${item.avatarImage}`}
                         sx={{ width: 35, height: 35, }}
                     />
                 </Box>
                 <Box sx={{padding:'5px','background-color': 'transparent'}}>
-                   <Box ><Typography variant='body2' sx={{'background-color': '#27282A'}}>ANJITH</Typography></Box>
+                   <Box ><Typography variant='body2' sx={{'background-color': '#27282A'}}>{item.username}</Typography></Box>
                    <Box sx={{'background-color': 'transparent'}}>
                    <p style={{fontSize:'12.5px','background-color': 'transparent'}}>hi sugano sir..</p>
                     </Box>             
@@ -39,5 +64,6 @@ export default function ChatView() {
                 </Box>
             </Box>
         </Outline>
-    )
+     ) 
 }
+    
