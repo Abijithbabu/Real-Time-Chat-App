@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion"; // Import motion from framer-motion
 import Search from "../components/elements/search";
 import ChatView from "../components/elements/chatView";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import { allUsersRoute } from "../utils/APIRoutes";
@@ -64,7 +64,7 @@ const ProfileBox = styled(motion.div)({
   width: "40vh",
   backgroundColor: "#1C1C24",
   color: "#fff",
-  marginTop: "10px", 
+  marginTop: "10px",
   marginBottom: "10px",
   borderRadius: "8px",
   marginLeft: "10px",
@@ -73,47 +73,47 @@ const ProfileBox = styled(motion.div)({
 export default function Home() {
   const [avatarClicked, setAvatarClicked] = useState(false);
   const [chatClicked, setChatClicked] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
   const [currentUser, setCurrentUser] = useState(undefined);
-    const handleChatClick = () => {
-        setChatClicked(!chatClicked);
-    };
-    useEffect(()=>{
-        const setUser = async () => {
-        if (!localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)) {
-          navigate("/login");
-        } else {
-          setCurrentUser(
-            await JSON.parse(
-              localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
-            )
-          );
-        }
+  const handleChatClick = () => {
+    setChatClicked(!chatClicked);
+  };
+  useEffect(() => {
+    const setUser = async () => {
+      if (!localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)) {
+        navigate("/login");
+      } else {
+        setCurrentUser(
+          await JSON.parse(
+            localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+          )
+        );
       }
-      setUser()
-      }, []);
+    };
+    setUser();
+  }, []);
   const handleAvatarClick = () => {
     setAvatarClicked(!avatarClicked);
   };
-  useEffect(()=>{
+  useEffect(() => {
     const newfn = async () => {
-    if (currentUser) {
-      if (currentUser.isAvatarImageSet) {
-        const data = await axios.get(`${allUsersRoute}/${currentUser._id}`); 
-        setContacts(data.data);
-      } else {
-        navigate("/setAvatar");
-      } 
-    }
-  }
-  newfn()
+      if (currentUser) {
+        if (currentUser.isAvatarImageSet) {
+          const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+          setContacts(data.data);
+        } else {
+          navigate("/setAvatar");
+        }
+      }
+    };
+    newfn();
   });
-  const handleChatChange = (chat) => { 
-    setCurrentChat(chat); 
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
   };
-  console.log(contacts)
+  console.log(contacts);
 
   return (
     <Box sx={{ backgroundColor: "#0F1418", marginBottom: "10px" }}>
@@ -123,7 +123,6 @@ export default function Home() {
             <Avater
               display="flex"
               flexDirection="row"
-              onClick={handleAvatarClick}
               initial={{ height: "10vh", width: "50px" }}
               animate={{
                 height: avatarClicked ? "30vh" : "5vh",
@@ -131,39 +130,47 @@ export default function Home() {
                 backgroundColor: avatarClicked ? "#1C1C24" : "",
                 opacity: avatarClicked ? 0.7 : 1,
               }}
-            > 
+            >
               {!avatarClicked && (
                 <Box
                   display={"flex"}
                   flexDirection={"row"}
                   sx={{ "background-color": "transparent" }}
                 >
-                  <Box sx={{ marginTop: "7px" }}>
-                    <Avatar 
+                  <motion.Box
+                    sx={{ marginTop: "50px" }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <Avatar
+                      onClick={handleAvatarClick}
+                      marginTop="55vh"
                       alt="Remy Sharp"
                       src="https://lh3.googleusercontent.com/YwiWk2MdDQ-eIgvDcs5x3CTYigdC8SvbPDZ64QqFC1BoVCohTF-1S3f4kTbs69UdzYxA7Q=s85"
                       sx={{ width: 24, height: 24 }}
                     />
-                  </Box>
+                  </motion.Box>
+
                   <AnimatePresence>
                     <motion.div
                       sx={{ Color: "#FFF" }}
-                      key="search" 
-                      initial={{ opacity: 0, x: -0 }} 
+                      key="search"
+                      initial={{ opacity: 0, x: -0 }}
                       animate={{
                         opacity: 1,
                         x: 0,
                         width: avatarClicked ? "10px" : "50px",
                       }}
                       //   exit={{ opacity: 0, x: -0 }}
+
                       transition={{ delay: 0.5 }} // Add a delay of 0.5 seconds
                     >
                       <Search />
                     </motion.div>
-                  </AnimatePresence>  
-                </Box> 
+                  </AnimatePresence>
+                </Box>
               )}
-            </Avater> 
+            </Avater>
           </Box>
           <Box display="flex" flexDirection="row">
             <Nav
@@ -180,33 +187,45 @@ export default function Home() {
               <Box sx={{ padding: "5px", "background-color": "transparent" }}>
                 Message
               </Box>
-    
-                <ChatView contacts={contacts} setChat={setCurrentChat}/>
-            </Chat> 
-            {/* )} */} 
-          </Box>   
+
+              <ChatView contacts={contacts} setChat={setCurrentChat} />
+            </Chat>
+            {/* )} */}
+          </Box>
         </Box>
-  
-        <ChatBox 
-              animate={{ 
-                height: currentChat ? "" : "",
-                width: currentChat ? "100vh" : "140vh",
-                right: currentChat ? "100px" : "0vh", 
-                backgroundColor: currentChat ? "#1C1C24" : "",
-                opacity: currentChat ? 0.7 : 1,
-              }}>x</ChatBox>
-        <ProfileBox sx={{'background-color': '#27282A'}}
-              animate={{
-                height: currentChat ? "" : "",
-                width: currentChat ? "40vh" : "0px",
-                right: currentChat ? "0px" : "10vh",
-                backgroundColor: currentChat ? "#1C1C24" : "",
-                opacity: currentChat ? 0.7 : 1,
-              }}>
-                {currentChat && (
-                <ProfleOppsite data={currentChat} sx={{'background-color': '#27282A'}}/>
-              )}
-              </ProfileBox>
+
+        <ChatBox
+          animate={{
+            height: currentChat ? "" : "",
+            width: currentChat ? "100vh" : "140vh",
+            right: currentChat ? "100px" : "0vh",
+            backgroundColor: currentChat ? "#1C1C24" : "",
+            opacity: currentChat ? 0.7 : 1,
+          }}
+        >
+          x
+        </ChatBox>
+        <ProfileBox
+          sx={{ "background-color": "#27282A" }}
+          animate={{
+            height: currentChat ? "" : "",
+            width: currentChat ? "40vh" : "0px",
+            right: currentChat ? "0px" : "10vh",
+            backgroundColor: currentChat ? "#1C1C24" : "",
+            opacity: currentChat ? 0.7 : 1,
+          }}
+        >
+         
+
+          {currentChat && (
+            <ProfleOppsite
+            data={currentChat}
+            sx={{ "background-color": "#27282A" }}
+            />
+            )}
+            
+          
+        </ProfileBox>
       </Box>
     </Box>
   );
