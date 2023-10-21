@@ -7,7 +7,7 @@ export default function Welcome() {
     const fetchUser = async () => {
       setUserName(
         await JSON.parse(
-          localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
         ).username
       );
   }

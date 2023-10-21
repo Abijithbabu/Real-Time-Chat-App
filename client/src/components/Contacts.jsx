@@ -9,7 +9,7 @@ export default function Contacts({ contacts, changeChat }) {
   useEffect(()=>{
     const fetchUser = async () => {
     const data = await JSON.parse(
-      localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
     setCurrentUserName(data.username);
     setCurrentUserImage(data.avatarImage);

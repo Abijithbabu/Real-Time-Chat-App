@@ -18,7 +18,7 @@ export default function Login() {
     theme: "dark",
   };
   useEffect(() => {
-    if (localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)) {
+    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
       navigate("/");
     }
   }, []);
@@ -52,7 +52,7 @@ export default function Login() {
       }
       if (data.status === true) {
         localStorage.setItem(
-          import.meta.env.VITE_APP_LOCALHOST_KEY,
+          process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)
         );
 

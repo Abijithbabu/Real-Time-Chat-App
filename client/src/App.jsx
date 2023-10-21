@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Home from "./pages/home";
 // import VideoCall from "./components/VideoCall";
 export default function App() {
+  console.log(process.env.REACT_APP_LOCALHOST_KEY)
   return (
     <BrowserRouter>
       <Routes>

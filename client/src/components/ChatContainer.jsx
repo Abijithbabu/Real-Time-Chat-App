@@ -14,9 +14,9 @@ export default function ChatContainer({ currentChat, socket }) {
   useEffect(()=>{
     const fun = async () => {
     const data = await JSON.parse(
-      localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
-      console.log('key',import.meta.env.VITE_APP_LOCALHOST_KEY)
+      console.log('key',process.env.REACT_APP_LOCALHOST_KEY)
     const response = await axios.post(recieveMessageRoute, {
       from: data._id,
       to: currentChat._id,
@@ -30,7 +30,7 @@ export default function ChatContainer({ currentChat, socket }) {
     const getCurrentChat = async () => {
       if (currentChat) {
         await JSON.parse(
-          localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
         )._id;
       }
     };
@@ -39,7 +39,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
   const handleSendMsg = async (msg) => {
     const data = await JSON.parse(
-      localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
     socket.current.emit("send-msg", {
       to: currentChat._id,
@@ -79,12 +79,12 @@ export default function ChatContainer({ currentChat, socket }) {
         <div className="user-details">
           <div className="avatar">
             <img
-              src={`data:image/svg+xml;base64,${currentChat.avatarImage}`}
+              src={`data:image/svg+xml;base64,${currentChat?.avatarImage}`}
               alt=""
             />
           </div>
           <div className="username">
-            <h3>{currentChat.username}</h3>
+            <h3>{currentChat?.username}</h3>
           </div>
         </div>
         <Logout />

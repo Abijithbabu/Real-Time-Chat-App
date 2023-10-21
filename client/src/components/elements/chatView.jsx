@@ -9,8 +9,9 @@ const container = {
     opacity: 1,
     scale: 1,
     transition: {
+      // delay: 0.8 ,
       delayChildren: 0.3,
-      staggerChildren: 0.2,
+      staggerChildren: 0.1,
     },
   },
 };
@@ -41,11 +42,11 @@ export default function ChatView({ contacts = [1, 2], changeChat, setChat }) {
   useEffect(() => {
     const fetchUser = async () => {
       const data = await JSON.parse(
-        localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
+        localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
       console.log(data);
-      setCurrentUserName(data.username);
-      setCurrentUserImage(data.avatarImage);
+      setCurrentUserName(data?.username);
+      setCurrentUserImage(data?.avatarImage);
     };
     fetchUser();
   }, []);
@@ -57,14 +58,15 @@ export default function ChatView({ contacts = [1, 2], changeChat, setChat }) {
     setChatClicked(true);
   };
   console.log(contacts);
-  return contacts.map((item) => (
-    <motion.ul
+  return (
+   contacts?.length ? (<motion.ul
       className="container"
       variants={container}
       initial="hidden"
       animate="visible"
     >
-      <motion.li  variants={items}>
+      {contacts.map((item,index) => (
+        <motion.li key={index} variants={items}>
         <Outline>
           <Box
             display={"flex"}
@@ -118,6 +120,9 @@ export default function ChatView({ contacts = [1, 2], changeChat, setChat }) {
           </Box>
         </Outline>
       </motion.li>
-    </motion.ul>
-  ));
+      ))}
+    </motion.ul>)
+    : "Loading..."
+  );
+
 }

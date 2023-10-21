@@ -1,5 +1,5 @@
 import { Avatar, Box, Container, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion"; // Import motion from framer-motion
 import Search from "../components/elements/search";
@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { allUsersRoute } from "../utils/APIRoutes";
 import ProfleOppsite from "../components/elements/profleOppsite";
+import ChatContainer from "../components/ChatContainer";
+import { io } from "socket.io-client";
 
 const Avater = styled(motion.div)({
   // Use motion.div for animated Avatar
@@ -74,46 +76,48 @@ export default function Home() {
   const [avatarClicked, setAvatarClicked] = useState(false);
   const [chatClicked, setChatClicked] = useState(false);
   const navigate = useNavigate();
+  const socket = useRef();
   const [contacts, setContacts] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
   const [currentUser, setCurrentUser] = useState(undefined);
-  const handleChatClick = () => {
-    setChatClicked(!chatClicked);
-  };
-  useEffect(() => {
+  useEffect(()=>{
     const setUser = async () => {
-      if (!localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)) {
-        navigate("/login");
-      } else {
-        setCurrentUser(
-          await JSON.parse(
-            localStorage.getItem(import.meta.env.VITE_APP_LOCALHOST_KEY)
-          )
-        );
-      }
-    };
-    setUser();
+    if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+      navigate("/login");
+    } else {
+      setCurrentUser(
+        await JSON.parse(
+          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+        )
+      );
+    }
+  }
+  setUser()
   }, []);
-  const handleAvatarClick = () => {
-    setAvatarClicked(!avatarClicked);
-  };
   useEffect(() => {
+    if (currentUser) {
+      socket.current = io('http://localhost:5000');
+      socket.current.emit("add-user", currentUser._id);
+    }
+  }, [currentUser]);
+
+  useEffect(()=>{
     const newfn = async () => {
-      if (currentUser) {
-        if (currentUser.isAvatarImageSet) {
-          const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-          setContacts(data.data);
-        } else {
-          navigate("/setAvatar");
-        }
+    if (currentUser) {
+      if (currentUser.isAvatarImageSet) {
+        const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+        setContacts(data.data);
+      } else {
+        navigate("/setAvatar");
       }
-    };
-    newfn();
-  });
+    }
+  }
+  newfn()
+  }, [currentUser]);
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
-  console.log(contacts);
+  console.log(contacts)
 
   return (
     <Box sx={{ backgroundColor: "#0F1418", marginBottom: "10px" }}>
@@ -143,7 +147,7 @@ export default function Home() {
                     whileHover={{ scale: 1.1 }}
                   >
                     <Avatar
-                      onClick={handleAvatarClick}
+                      onClick={(prev)=>setAvatarClicked(!prev)}
                       marginTop="55vh"
                       alt="Remy Sharp"
                       src="https://lh3.googleusercontent.com/YwiWk2MdDQ-eIgvDcs5x3CTYigdC8SvbPDZ64QqFC1BoVCohTF-1S3f4kTbs69UdzYxA7Q=s85"
@@ -203,7 +207,7 @@ export default function Home() {
             opacity: currentChat ? 0.7 : 1,
           }}
         >
-          x
+        {currentChat && <ChatContainer currentChat={currentChat} socket={socket}/> }
         </ChatBox>
         <ProfileBox
           sx={{ "background-color": "#27282A" }}
@@ -218,12 +222,16 @@ export default function Home() {
          
 
           {currentChat && (
+            <Box>
+
             <ProfleOppsite
             data={currentChat}
             sx={{ "background-color": "#27282A" }}
             />
-            )}
             
+            <ChatView contacts={contacts} setChat={setCurrentChat}/>
+            </Box>
+            )}
           
         </ProfileBox>
       </Box>
