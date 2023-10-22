@@ -7,7 +7,10 @@ const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
 
-app.use(cors());
+app.use(cors({
+  origin: ["http://127.0.0.1:5173", "http://localhost:3000"],
+  credentials: true,
+}));
 app.use(express.json());
 
 mongoose
@@ -45,9 +48,9 @@ io.on("connection", (socket) => {
 
   socket.on("send-msg", (data) => {
     const sendUserSocket = onlineUsers.get(data.to);
-    console.log(data.to)
+    console.log(data)
     if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+      socket.to(sendUserSocket).emit("msg-recieve", data);
     }
   });
   // video call configurations

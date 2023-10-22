@@ -3,6 +3,33 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import styled from "styled-components";
 import Picker from "emoji-picker-react";
+import { Box, TextField } from "@mui/material";
+
+const InputBar = styled(Box)({
+  // Use motion.div for animated Chat
+  height: "34px",
+  width: "88vh",
+  backgroundColor: "#474C52",
+  color: "#D1D2D4",
+  margin: "40px 0px 0px 0px",
+  marginBottom: "0px",
+  borderRadius: "6px",
+  padding: "9px",
+  // paddingRight: "220px",
+});
+
+const SentBtn = styled(Box)({
+  // Use motion.div for animated Chat
+  height: "34px",
+  width: "4vh",
+  backgroundColor: "#474C52",
+  color: "#D1D2D4",
+  margin: "40px 0px 0px 20px",
+  marginBottom: "0px",
+  borderRadius: "6px",
+  padding: "9px",
+  // paddingRight: "220px",
+});
 
 export default function ChatInput({ handleSendMsg }) {
   const [msg, setMsg] = useState("");
@@ -26,7 +53,12 @@ export default function ChatInput({ handleSendMsg }) {
   };
 
   return (
-    <Container>
+    // <Container>
+    <Box
+      display={"flex"}
+      flexDirection={""}
+      sx={{ "background-color": "tranparent" }}
+    >
       <div className="button-container">
         <div className="emoji">
           <BsEmojiSmileFill onClick={handleEmojiPickerhideShow} />
@@ -34,17 +66,34 @@ export default function ChatInput({ handleSendMsg }) {
         </div>
       </div>
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
-        <input
-          type="text"
-          placeholder="type your message here"
-          onChange={(e) => setMsg(e.target.value)}
-          value={msg}
-        />
+        <Box
+          display={"flex"}
+          flexDirection={""}
+          sx={{ "background-color": "tranparent" }}
+        >
+          <InputBar>
+            <TextField
+              style={{ width: "100vh" }}
+              id="standard-multiline-static"
+              // label="Multiline"
+              multiline
+              rows={4}
+              placeholder="type your message here                                       "
+              // defaultValue="type your message here"
+              type="text"
+              variant="standard"
+              onChange={(e) => setMsg(e.target.value)}
+              value={msg}
+            />
+          </InputBar>
+          <SentBtn>df</SentBtn>
+        </Box>
         <button type="submit">
           <IoMdSend />
         </button>
       </form>
-    </Container>
+    </Box>
+    // {/* </Container> */}
   );
 }
 
@@ -142,3 +191,26 @@ const Container = styled.div`
     }
   }
 `;
+//  // <Container>
+//  <Box display={'flex'} flexDirection={'row'} sx={{'background-color': 'tranparent'}}>
+//  <InputBar>
+// <div className="button-container">
+//  <div className="emoji">
+//    <BsEmojiSmileFill onClick={handleEmojiPickerhideShow} />
+//    {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
+//  </div>
+// </div>
+// <form className="input-container" onSubmit={(event) => sendChat(event)}>
+//  <input
+//    type="text"
+//    placeholder="type your message here"
+//    onChange={(e) => setMsg(e.target.value)}
+//    value={msg}
+//    />
+//  <button type="submit">
+//    <IoMdSend />
+//  </button>
+// </form>
+//    </InputBar>
+//  </Box>
+// {/* </Container> */}

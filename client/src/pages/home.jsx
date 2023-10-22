@@ -11,6 +11,7 @@ import { allUsersRoute } from "../utils/APIRoutes";
 import ProfleOppsite from "../components/elements/profleOppsite";
 import ChatContainer from "../components/ChatContainer";
 import { io } from "socket.io-client";
+import { moveToTop } from "../utils/functions";
 
 const Avater = styled(motion.div)({
   // Use motion.div for animated Avatar
@@ -31,7 +32,7 @@ const Avater = styled(motion.div)({
 const Nav = styled(motion.div)({
   // Use motion.div for animated Nav
   height: "90vh",
-  width: "50px",
+  width: "px",
   backgroundColor: "",
   color: "white",
   padding: "20px",
@@ -40,7 +41,7 @@ const Nav = styled(motion.div)({
 const Chat = styled(motion.div)({
   // Use motion.div for animated Chat
   height: "",
-  width: "250px",
+  width: "270px",
   backgroundColor: "#1C1C24",
   color: "#D1D2D4",
   marginTop: "0px",
@@ -55,7 +56,7 @@ const ChatBox = styled(motion.div)({
   backgroundColor: "#1C1C24",
   color: "#fff",
   marginTop: "10px",
-  marginBottom: "10px",
+  marginBottom: "100px",
   borderRadius: "8px",
   marginLeft: "10px",
   padding: "0px",
@@ -118,7 +119,11 @@ export default function Home() {
     setCurrentChat(chat);
   };
   console.log(contacts)
-
+  const handleRecent = (id,msg,rec)=>{
+    console.log('calling')
+    console.log(moveToTop(contacts,id,msg,rec,currentChat?._id)) 
+    setContacts(moveToTop(contacts,id,msg,rec,currentChat?._id))
+    }
   return (
     <Box sx={{ backgroundColor: "#0F1418", marginBottom: "10px" }}>
       <Box display="flex" flexDirection="row">
@@ -147,7 +152,8 @@ export default function Home() {
                     whileHover={{ scale: 1.1 }}
                   >
                     <Avatar
-                      onClick={(prev)=>setAvatarClicked(!prev)}
+                      onClick={setAvatarClicked}
+                      // {(prev)=>setAvatarClicked(!prev)}
                       marginTop="55vh"
                       alt="Remy Sharp"
                       src="https://lh3.googleusercontent.com/YwiWk2MdDQ-eIgvDcs5x3CTYigdC8SvbPDZ64QqFC1BoVCohTF-1S3f4kTbs69UdzYxA7Q=s85"
@@ -185,7 +191,7 @@ export default function Home() {
             </Nav>
             {/* {avatarClicked && ( */}
             <Chat
-              initial={{ height: "50vh", width: "270px" }}
+              initial={{ height: "50vh", width: "310px" }}
               animate={{ height: "100vh", flex: 1 }}
             >
               <Box sx={{ padding: "5px", "background-color": "transparent" }}>
@@ -207,7 +213,7 @@ export default function Home() {
             opacity: currentChat ? 0.7 : 1,
           }}
         >
-        {currentChat && <ChatContainer currentChat={currentChat} socket={socket}/> }
+        {currentChat && <ChatContainer currentChat={currentChat} socket={socket} handleRecent={handleRecent}/> }
         </ChatBox>
         <ProfileBox
           sx={{ "background-color": "#27282A" }}

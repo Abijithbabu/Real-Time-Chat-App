@@ -59,14 +59,14 @@ export default function ChatView({ contacts = [1, 2], changeChat, setChat }) {
   };
   console.log(contacts);
   return (
-   contacts?.length ? (<motion.ul
+   contacts?.length ? (<motion.div
       className="container"
       variants={container}
       initial="hidden"
       animate="visible"
     >
       {contacts.map((item,index) => (
-        <motion.li key={index} variants={items}>
+        <motion.li key={index} variants={items} style={{listStyleType:'none'}}>
         <Outline>
           <Box
             display={"flex"}
@@ -121,7 +121,7 @@ export default function ChatView({ contacts = [1, 2], changeChat, setChat }) {
         </Outline>
       </motion.li>
       ))}
-    </motion.ul>)
+    </motion.div>)
     : "Loading..."
   );
 
